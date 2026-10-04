@@ -1,0 +1,528 @@
+@import "tailwindcss";
+
+@media print {
+  /* 1. Page Definition - Safe margins to prevent top clipping on physical printers */
+  @page {
+    size: A4 portrait;
+    margin: var(--print-page-margin, 14mm 6mm 5mm 6mm) !important;
+  }
+
+  /* 2. Universal Reset */
+  html,
+  body {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 3. Hide all screen navigation, controls, headers, buttons */
+  nav,
+  aside,
+  header,
+  footer,
+  button,
+  input:not([type="checkbox"]),
+  select,
+  textarea,
+  .print\:hidden,
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* 4. Reset parents and containers so they don't clip or constrain printing */
+  #root,
+  #root > div,
+  main {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  /* Isolate printable reports so background app screens and sidebars are never printed */
+  body:has(#printable-shift-report) #root > *:not(:has(#printable-shift-report)),
+  body:has(#printable-contract) #root > *:not(:has(#printable-contract)),
+  body:has(#printable-corporate-b2b-contract) #root > *:not(:has(#printable-corporate-b2b-contract)),
+  body:has(#printable-tax-invoice) #root > *:not(:has(#printable-tax-invoice)),
+  body:has(#printable-invoice) #root > *:not(:has(#printable-invoice)),
+  body:has(#printable-sale-contract) #root > *:not(:has(#printable-sale-contract)),
+  body:has(#printable-delivery-report) #root > *:not(:has(#printable-delivery-report)),
+  body:has(#printable-receipt-voucher) #root > *:not(:has(#printable-receipt-voucher)),
+  body:has(#printable-customer-statement) #root > *:not(:has(#printable-customer-statement)),
+  body:has(#periodic-report-print-content) #root > *:not(:has(#periodic-report-print-content)),
+  body:has(#printable-inspection-report) #root > *:not(:has(#printable-inspection-report)),
+  body:has(#printable-handover-receipt) #root > *:not(:has(#printable-handover-receipt)),
+  body:has(#printable-employee-attendance-summary) #root > *:not(:has(#printable-employee-attendance-summary)),
+  body:has(#printable-driver-attendance-summary) #root > *:not(:has(#printable-driver-attendance-summary)) {
+    display: none !important;
+  }
+
+  /* 5. Modal Backdrop & Container Reset: flatten fixed overlays to regular flow */
+  .fixed,
+  .fixed.inset-0,
+  [class*="fixed"],
+  [class*="backdrop-blur"],
+  [class*="bg-black"] {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: block !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  /* 6. Screen containers cleanup */
+  nav,
+  aside,
+  header,
+  footer,
+  .print\:hidden,
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* 7. SVGs must keep their exact pixel sizes and NEVER scale to full page */
+  svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+  }
+  svg.w-3, svg.h-3 { width: 12px !important; height: 12px !important; }
+  svg.w-3\.5, svg.h-3\.5 { width: 14px !important; height: 14px !important; }
+  svg.w-4, svg.h-4 { width: 16px !important; height: 16px !important; }
+  svg.w-5, svg.h-5 { width: 20px !important; height: 20px !important; }
+  svg.w-6, svg.h-6 { width: 24px !important; height: 24px !important; }
+
+  /* 8. Image visibility option */
+  body.print-hide-images img,
+  body.print-hide-images .print-image-node {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Watermark print visibility */
+  body.print-hide-watermark .contract-watermark-overlay,
+  body.print-hide-watermark .contract-watermark-text,
+  body.print-hide-watermark .contract-watermark-subtext {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .contract-watermark-overlay {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .contract-watermark-text {
+    color: rgba(15, 23, 42, 0.12) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .contract-watermark-subtext {
+    color: rgba(15, 23, 42, 0.10) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Outer Page Frame (برواز خارجي رسمي للورقة) */
+  .print-page-frame {
+    border: 2.5px solid #0f172a !important;
+    outline: 1.5px solid #0f172a !important;
+    outline-offset: -4px !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 8. Specific A4 Single-Page Contract: Generous Top Margin & Perfectly Balanced Full-Page Distribution */
+  #printable-contract {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-top: 6mm !important;
+    padding-bottom: 5mm !important;
+    padding-left: 6mm !important;
+    padding-right: 6mm !important;
+    margin: 0 auto !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: var(--print-font-size, 7.8pt) !important;
+    line-height: 1.18 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+  }
+
+  #printable-contract * {
+    text-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #printable-contract .p-6,
+  #printable-contract .p-5,
+  #printable-contract .p-4,
+  #printable-contract .p-3\.5,
+  #printable-contract .p-3,
+  #printable-contract .p-2\.5 {
+    padding: 4px 6px !important;
+  }
+
+  #printable-contract .p-2,
+  #printable-contract .p-1\.5,
+  #printable-contract .p-1 {
+    padding: 3px 5px !important;
+  }
+
+  #printable-contract .mb-6,
+  #printable-contract .mb-4,
+  #printable-contract .mb-3\.5,
+  #printable-contract .mb-3,
+  #printable-contract .mb-2\.5 {
+    margin-bottom: 4px !important;
+  }
+
+  #printable-contract .mb-2,
+  #printable-contract .mb-1\.5,
+  #printable-contract .mb-1 {
+    margin-bottom: 3px !important;
+  }
+
+  #printable-contract .gap-3,
+  #printable-contract .gap-2\.5,
+  #printable-contract .gap-2,
+  #printable-contract .gap-1\.5 {
+    gap: 4px !important;
+  }
+
+  #printable-contract .h-16,
+  #printable-contract .h-14,
+  #printable-contract .h-12,
+  #printable-contract .h-11,
+  #printable-contract .h-10,
+  #printable-contract .h-9 {
+    height: 38px !important;
+    max-height: 40px !important;
+  }
+
+  #printable-contract img {
+    max-height: 38px !important;
+    object-fit: contain !important;
+  }
+
+  #printable-contract .contract-signatures-area {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+  }
+
+  /* 9. Vehicle Handover Receipt - 1 Page A4 Exact Fit */
+  #printable-handover-receipt {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 285mm !important;
+    overflow: hidden !important;
+    padding-top: 5mm !important;
+    padding-bottom: 2mm !important;
+    padding-left: 2mm !important;
+    padding-right: 2mm !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: var(--print-font-size, 7.5pt) !important;
+    line-height: 1.12 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+  }
+
+  #printable-handover-receipt * {
+    text-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #printable-handover-receipt .p-4,
+  #printable-handover-receipt .p-3,
+  #printable-handover-receipt .p-2\.5,
+  #printable-handover-receipt .p-2 {
+    padding: 2px 4px !important;
+  }
+
+  #printable-handover-receipt .mb-4,
+  #printable-handover-receipt .mb-3,
+  #printable-handover-receipt .mb-2\.5,
+  #printable-handover-receipt .mb-2 {
+    margin-bottom: 1.5px !important;
+  }
+
+  #printable-handover-receipt .h-14,
+  #printable-handover-receipt .h-12,
+  #printable-handover-receipt .h-10 {
+    height: 26px !important;
+    max-height: 26px !important;
+  }
+
+  /* 10. Corporate B2B Contract - Exactly 2 Pages A4 */
+  #printable-corporate-b2b-contract {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: var(--print-font-size, 8.2pt) !important;
+    line-height: 1.2 !important;
+  }
+
+  #printable-corporate-b2b-contract .b2b-page-1,
+  #printable-corporate-b2b-contract .b2b-page-2 {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 265mm !important;
+    max-height: 280mm !important;
+    padding: 4mm 6mm !important;
+    margin: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  #printable-corporate-b2b-contract .b2b-page-1 {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  #printable-corporate-b2b-contract .b2b-page-2 {
+    page-break-before: always !important;
+    page-break-after: auto !important;
+    break-before: page !important;
+    break-after: auto !important;
+  }
+
+  /* 11. Car Sale Contract - Guaranteed 1-Page Fit */
+  #printable-sale-contract {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 285mm !important;
+    overflow: hidden !important;
+    padding-top: 5mm !important;
+    padding-bottom: 2mm !important;
+    padding-left: 2mm !important;
+    padding-right: 2mm !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: var(--print-font-size, 7.5pt) !important;
+    line-height: 1.15 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+  }
+
+  #printable-sale-contract * {
+    text-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #printable-sale-contract .p-6,
+  #printable-sale-contract .p-4,
+  #printable-sale-contract .p-3,
+  #printable-sale-contract .p-2\.5 {
+    padding: 2px 4px !important;
+  }
+
+  #printable-sale-contract .mb-6,
+  #printable-sale-contract .mb-4,
+  #printable-sale-contract .mb-3,
+  #printable-sale-contract .mb-2 {
+    margin-bottom: 2px !important;
+  }
+
+  #printable-sale-contract .space-y-4 > * + * {
+    margin-top: 2px !important;
+  }
+
+  #printable-sale-contract .space-y-3 > * + * {
+    margin-top: 1.5px !important;
+  }
+
+  #printable-sale-contract .h-12,
+  #printable-sale-contract .h-10 {
+    height: 24px !important;
+    max-height: 24px !important;
+  }
+
+  /* 12. Printable Invoices & Tax Invoices - 1 Page A4 Exact Fit */
+  #printable-invoice,
+  #printable-tax-invoice {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 285mm !important;
+    overflow: hidden !important;
+    padding: 4mm 6mm !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: var(--print-font-size, 8.5pt) !important;
+    line-height: 1.2 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+  }
+
+  #printable-invoice *,
+  #printable-tax-invoice * {
+    text-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #printable-invoice .p-6,
+  #printable-invoice .p-4,
+  #printable-tax-invoice .p-8,
+  #printable-tax-invoice .p-4 {
+    padding: 3px 6px !important;
+  }
+
+  #printable-invoice .mb-6,
+  #printable-invoice .my-6,
+  #printable-invoice .mb-8,
+  #printable-tax-invoice .pb-6,
+  #printable-tax-invoice .pt-8 {
+    margin-bottom: 3px !important;
+    margin-top: 3px !important;
+    padding-bottom: 3px !important;
+    padding-top: 3px !important;
+  }
+}
+
+/* Base Document Frame & Watermark Styles (Screen & Print) */
+.print-page-frame {
+  border: 2px solid #0f172a;
+  outline: 1px solid #0f172a;
+  outline-offset: -4.5px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.contract-watermark-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.contract-watermark-text {
+  font-size: 48pt;
+  font-weight: 900;
+  color: #0f172a;
+  opacity: var(--print-watermark-opacity, 0.12);
+  transform: rotate(-30deg);
+  user-select: none;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  font-family: Arial, Tahoma, sans-serif;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.contract-watermark-subtext {
+  font-size: 13pt;
+  font-weight: 800;
+  color: #0f172a;
+  opacity: var(--print-watermark-opacity, 0.10);
+  transform: rotate(-30deg);
+  user-select: none;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  font-family: Arial, Tahoma, sans-serif;
+  margin-top: 8px;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Ensure all inputs, textareas, and select elements remain fully interactive and receive keystrokes smoothly */
+input,
+textarea,
+select {
+  touch-action: manipulation;
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  caret-color: auto !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+/* Ensure placeholder and cursor stay clear and visible */
+input::placeholder,
+textarea::placeholder {
+  user-select: none;
+  opacity: 0.65;
+}
+
+
+
+
+

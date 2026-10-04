@@ -1,0 +1,6 @@
+{
+  "name": "AutoFleet & Rental Management System",
+  "description": "Comprehensive fleet, rental, delivery, sales, and maintenance management system with Arabic/English localization, developer authority mode, user access controls, and camera capture.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
